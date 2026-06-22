@@ -687,6 +687,10 @@
             width: 100%;
             margin-top: 8px;
         }
+        .profile-logout-btn {
+            width: 100%;
+            margin-top: 12px;
+        }
 
         /* ============================================
            CATEGORY DASHBOARD
@@ -1652,7 +1656,7 @@
                 <h1>ThinkTank</h1>
                 <p class="tagline">Learn • Challenge • Excel</p>
                 <p class="desc">
-                    Test your knowledge across 10 categories with timed challenges,
+                    Test your knowledge across 11 categories with timed challenges,
                     instant feedback, and detailed analytics.
                 </p>
                 <button class="btn btn-primary btn-lg cta-btn animate-float" id="getStartedBtn">
@@ -1661,12 +1665,12 @@
                 <div class="info-grid">
                     <div class="info-card animate-fade-up delay-1">
                         <div class="icon"><i class="fas fa-layer-group"></i></div>
-                        <div class="number" id="infoCategories" data-target="10">0</div>
+                        <div class="number" id="infoCategories" data-target="11">0</div>
                         <div class="label">Categories</div>
                     </div>
                     <div class="info-card animate-fade-up delay-2">
                         <div class="icon"><i class="fas fa-question-circle"></i></div>
-                        <div class="number" id="infoQuestions" data-target="104">0</div>
+                        <div class="number" id="infoQuestions" data-target="114">0</div>
                         <div class="label">Questions</div>
                     </div>
                     <div class="info-card animate-fade-up delay-3">
@@ -1676,7 +1680,7 @@
                     </div>
                     <div class="info-card animate-fade-up delay-4">
                         <div class="icon"><i class="fas fa-trophy"></i></div>
-                        <div class="number" id="infoHighScore" data-target="91">0</div>
+                        <div class="number" id="infoHighScore" data-target="0">0</div>
                         <div class="label">High Score</div>
                     </div>
                 </div>
@@ -1738,6 +1742,11 @@
 
             <button class="btn btn-primary profile-start-btn" id="startQuizBtn">
                 <i class="fas fa-flag-checkered"></i> Start Quiz
+            </button>
+
+            <!-- Logout button – stays on profile screen after logout -->
+            <button class="btn btn-secondary profile-logout-btn" id="profileLogoutBtn">
+                <i class="fas fa-sign-out-alt"></i> Logout / Clear Profile
             </button>
         </div>
     </section>
@@ -2244,7 +2253,42 @@
                 options: ["A contradiction in terms", "A type of metaphor", "A figure of speech", "A type of poem"],
                 answer: "A contradiction in terms",
                 explanation: "An oxymoron combines contradictory terms." },
+
+            // ============================================================
+            // NEW: 10 Questions for "General Science"
+            // ============================================================
+            { id: 105, category: "General Science", difficulty: "Easy", question: "What is the SI unit of electric current?",
+                options: ["Ampere", "Volt", "Ohm", "Watt"], answer: "Ampere",
+                explanation: "The ampere (A) is the SI base unit of electric current." },
+            { id: 106, category: "General Science", difficulty: "Easy", question: "What is the most abundant gas in Earth's atmosphere?",
+                options: ["Oxygen", "Nitrogen", "Carbon Dioxide", "Argon"], answer: "Nitrogen",
+                explanation: "Nitrogen makes up about 78% of Earth's atmosphere." },
+            { id: 107, category: "General Science", difficulty: "Easy", question: "What is the smallest planet in our solar system?",
+                options: ["Mercury", "Venus", "Mars", "Pluto"], answer: "Mercury",
+                explanation: "Mercury is the smallest planet in our solar system." },
+            { id: 108, category: "General Science", difficulty: "Easy", question: "What is the chemical symbol for Iron?",
+                options: ["Fe", "Ir", "In", "I"], answer: "Fe",
+                explanation: "Fe comes from the Latin 'ferrum' meaning iron." },
+            { id: 109, category: "General Science", difficulty: "Medium", question: "What is the process of a liquid turning into a gas called?",
+                options: ["Condensation", "Evaporation", "Sublimation", "Precipitation"], answer: "Evaporation",
+                explanation: "Evaporation is the phase transition from liquid to gas." },
+            { id: 110, category: "General Science", difficulty: "Medium", question: "What is the name of the galaxy containing Earth?",
+                options: ["Andromeda", "Milky Way", "Sombrero", "Triangulum"], answer: "Milky Way",
+                explanation: "Earth is located in the Milky Way galaxy." },
+            { id: 111, category: "General Science", difficulty: "Medium", question: "What is the pH value of pure water?",
+                options: ["5", "6", "7", "8"], answer: "7",
+                explanation: "Pure water has a neutral pH of 7." },
+            { id: 112, category: "General Science", difficulty: "Medium", question: "What is the unit of frequency?",
+                options: ["Hertz", "Newton", "Joule", "Watt"], answer: "Hertz",
+                explanation: "The hertz (Hz) is the SI unit of frequency." },
+            { id: 113, category: "General Science", difficulty: "Hard", question: "What is the main component of the Sun?",
+                options: ["Helium", "Hydrogen", "Carbon", "Oxygen"], answer: "Hydrogen",
+                explanation: "The Sun is about 73% hydrogen and 25% helium." },
+            { id: 114, category: "General Science", difficulty: "Hard", question: "What is the study of the structure of matter called?",
+                options: ["Chemistry", "Physics", "Biology", "Geology"], answer: "Chemistry",
+                explanation: "Chemistry is the study of matter and its properties." },
         ];
+
         const state = {
             name: '',
             avatar: '🧑‍🎓',
@@ -2441,7 +2485,8 @@
             const map = { 'General Knowledge': 'fa-globe', 'Science': 'fa-flask', 'Technology': 'fa-microchip',
                 'Mathematics': 'fa-calculator', 'Sports': 'fa-futbol', 'History': 'fa-landmark',
                 'Geography': 'fa-earth-americas', 'Computer Science': 'fa-laptop-code',
-                'Current Affairs': 'fa-newspaper', 'English Grammar': 'fa-book-open' };
+                'Current Affairs': 'fa-newspaper', 'English Grammar': 'fa-book-open',
+                'General Science': 'fa-atom' };
             return map[cat] || 'fa-question-circle';
         }
 
@@ -2452,7 +2497,6 @@
 
         function renderWelcome() {
             const highScore = getFromStorage('highScore', 0);
-            // Update high score target and trigger count-up
             const highScoreEl = document.getElementById('infoHighScore');
             if (highScoreEl) {
                 highScoreEl.setAttribute('data-target', highScore);
@@ -2484,13 +2528,12 @@
                     counter.textContent = target;
                     return;
                 }
-                const duration = 2000; // 2 seconds
+                const duration = 2000;
                 const startTime = performance.now();
 
                 const updateCounter = (currentTime) => {
                     const elapsed = currentTime - startTime;
                     const progress = Math.min(elapsed / duration, 1);
-                    // easeOutCubic for a smooth finish
                     const easedProgress = 1 - Math.pow(1 - progress, 3);
                     const currentValue = Math.floor(easedProgress * target);
                     counter.textContent = currentValue;
@@ -2605,7 +2648,6 @@
             const isCorrect = answerData ? answerData.isCorrect : null;
             const skipped = answerData ? answerData.skipped : false;
 
-            // Disable options if question is answered OR skipped
             const isDisabled = state.isAnswered || skipped || selected !== null;
 
             grid.innerHTML = q.options.map((opt, i) => {
@@ -2728,9 +2770,6 @@
             }
         }
 
-        // =============================================
-        // FIXED: skipQuestion – now auto-advances after skip
-        // =============================================
         function skipQuestion() {
             if (state.isAnswered) return;
             const idx = state.currentIndex;
@@ -2757,12 +2796,10 @@
             updateProgress();
             persistState();
 
-            // Auto-advance to next question after a short delay
             setTimeout(() => {
                 if (state.currentIndex < state.questions.length - 1) {
                     nextQuestion();
                 } else {
-                    // If it's the last question, submit the quiz
                     submitQuiz();
                 }
             }, 700);
@@ -2778,9 +2815,6 @@
             sound.play('click');
         }
 
-        // =============================================
-        // TIMER – 20 seconds
-        // =============================================
         function startTimer() {
             state.timer = 20;
             updateTimerDisplay();
@@ -2990,7 +3024,6 @@
         }
         function showResults() {
             showScreen('results-screen');
-            // Populate category selector
             const catSelect = $('resultsCategorySelect');
             const cats = [...new Set(QUESTION_DB.map(q => q.category))].sort();
             catSelect.innerHTML = cats.map(c => `<option value="${c}">${c}</option>`).join('');
@@ -3080,7 +3113,6 @@
                 </tr>
             `).join('');
 
-            // Attach delete events
             tbody.querySelectorAll('.delete-btn').forEach(btn => {
                 btn.addEventListener('click', (e) => {
                     const idx = parseInt(btn.dataset.index, 10);
@@ -3117,6 +3149,25 @@
                     </div>
                 `;
             }).join('');
+        }
+
+        // ============================================================
+        //  LOGOUT – clears user data and STAYS ON PROFILE SCREEN
+        // ============================================================
+        function performLogout() {
+            // Clear session state
+            state.name = '';
+            state.avatar = '🧑‍🎓';
+            state.category = '';
+            state.difficulty = 'Medium';
+            state.bookmarks = new Set();
+            state.quizHistory = [];
+            state.achievements = [];
+            // Save cleared state
+            persistState();
+            // Show the profile screen with cleared fields – stay on same page
+            showScreen('profile-screen');
+            renderProfile();
         }
 
         function initEvents() {
@@ -3218,12 +3269,22 @@
                 if (e.key === 'b' || e.key === 'B') { toggleBookmark(); }
             });
 
-            // Logout
+            // Logout – from category dashboard (also stays on profile)
             $('catLogoutBtn').addEventListener('click', () => {
                 sound.play('click');
-                if (confirm('Logout?')) { showScreen('welcome-screen');
-                    renderWelcome(); }
+                if (confirm('Logout?')) {
+                    performLogout();
+                }
             });
+
+            // Logout – from profile screen (new)
+            $('profileLogoutBtn').addEventListener('click', () => {
+                sound.play('click');
+                if (confirm('Clear your profile and logout?')) {
+                    performLogout();
+                }
+            });
+
             $('reviewBtn').addEventListener('click', () => { sound.play('click');
                 showScreen('review-screen');
                 renderReview('all'); });
@@ -3286,7 +3347,6 @@
             }
             initEvents();
             setTimeout(() => { document.getElementById('loader').classList.add('hide'); }, 500);
-            // Ensure count-up runs after loader hides
             setTimeout(() => renderWelcome(), 600);
         }
 
