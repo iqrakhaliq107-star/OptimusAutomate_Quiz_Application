@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ThinkTank – Advanced Quiz</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+    <!-- LOADER -->
+    <div class="loader-overlay" id="loader">
+        <div class="loader-spinner"></div>
+    </div>
+
+    <!-- CONFETTI CANVAS -->
+    <canvas id="confetti-canvas"></canvas>
+
+    <!-- SOUND TOGGLE -->
+    <button class="sound-toggle" id="soundToggle" aria-label="Toggle sound">
+        <i class="fas fa-volume-up"></i>
+    </button>
+
+    <!-- ============================================
+    WELCOME SCREEN
+    ============================================ -->
+    <section id="welcome-screen" role="main" aria-label="Welcome">
+        <div class="bg-shapes">
+            <span></span><span></span><span></span>
+        </div>
+        <div class="floating-icons">
+            <i class="fas fa-brain"></i>
+            <i class="fas fa-rocket"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-bolt"></i>
+            <i class="fas fa-crown"></i>
+            <i class="fas fa-fire"></i>
+        </div>
+        <div class="container welcome-content">
+            <div class="welcome-hero">
+                <div class="logo"><i class="fas fa-graduation-cap"></i></div>
+                <h1>ThinkTank</h1>
+                <p class="tagline">Learn • Challenge • Excel</p>
+                <p class="desc">
+                    Test your knowledge across 11 categories with timed challenges,
+                    instant feedback, and detailed analytics.
+                </p>
+                <button class="btn btn-primary btn-lg cta-btn animate-float" id="getStartedBtn">
+                    <i class="fas fa-play"></i> Get Started
+                </button>
+                <div class="info-grid">
+                    <div class="info-card animate-fade-up delay-1">
+                        <div class="icon"><i class="fas fa-layer-group"></i></div>
+                        <div class="number" id="infoCategories" data-target="11">0</div>
+                        <div class="label">Categories</div>
+                    </div>
+                    <div class="info-card animate-fade-up delay-2">
+                        <div class="icon"><i class="fas fa-question-circle"></i></div>
+                        <div class="number" id="infoQuestions" data-target="114">0</div>
+                        <div class="label">Questions</div>
+                    </div>
+                    <div class="info-card animate-fade-up delay-3">
+                        <div class="icon"><i class="fas fa-signal"></i></div>
+                        <div class="number" id="infoDifficulties" data-target="3">0</div>
+                        <div class="label">Difficulties</div>
+                    </div>
+                    <div class="info-card animate-fade-up delay-4">
+                        <div class="icon"><i class="fas fa-trophy"></i></div>
+                        <div class="number" id="infoHighScore" data-target="0">0</div>
+                        <div class="label">High Score</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+    PROFILE SETUP
+    ============================================ -->
+    <section id="profile-screen" class="hidden" role="main" aria-label="Profile Setup">
+        <div class="profile-card">
+            <h2>👋 Welcome!</h2>
+            <p class="sub">Set up your profile and start your quiz journey</p>
+
+            <div class="form-group">
+                <label for="playerName">Your Name</label>
+                <input type="text" id="playerName" placeholder="Enter your name..." maxlength="30" />
+            </div>
+
+            <div class="form-group">
+                <label>Choose Avatar</label>
+                <div class="avatar-grid" id="avatarGrid">
+                    <div class="avatar-option active" data-avatar="🧑‍🎓"><span>🧑‍🎓</span></div>
+                    <div class="avatar-option" data-avatar="👩‍💻"><span>👩‍💻</span></div>
+                    <div class="avatar-option" data-avatar="🧑‍🔬"><span>🧑‍🔬</span></div>
+                    <div class="avatar-option" data-avatar="👨‍🎤"><span>👨‍🎤</span></div>
+                    <div class="avatar-option" data-avatar="🧙‍♂️"><span>🧙‍♂️</span></div>
+                    <div class="avatar-option" data-avatar="🦸‍♀️"><span>🦸‍♀️</span></div>
+                    <div class="avatar-option" data-avatar="🤖"><span>🤖</span></div>
+                    <div class="avatar-option" data-avatar="🐱"><span>🐱</span></div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Theme</label>
+                <div class="theme-options" id="themeOptions">
+                    <div class="theme-option active" data-theme="light">☀️ Light</div>
+                    <div class="theme-option" data-theme="dark">🌙 Dark</div>
+                    <div class="theme-option" data-theme="blue">🔵 Blue</div>
+                    <div class="theme-option" data-theme="purple">🟣 Purple</div>
+                    <div class="theme-option" data-theme="green">🟢 Green</div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="categorySelect">Quiz Category</label>
+                <select id="categorySelect"></select>
+            </div>
+
+            <div class="form-group">
+                <label for="difficultySelect">Difficulty Level</label>
+                <select id="difficultySelect">
+                    <option value="Easy">🟢 Easy</option>
+                    <option value="Medium" selected>🟡 Medium</option>
+                    <option value="Hard">🔴 Hard</option>
+                </select>
+            </div>
+
+            <button class="btn btn-primary profile-start-btn" id="startQuizBtn">
+                <i class="fas fa-flag-checkered"></i> Start Quiz
+            </button>
+
+            <!-- Logout button – stays on profile screen after logout -->
+            <button class="btn btn-secondary profile-logout-btn" id="profileLogoutBtn">
+                <i class="fas fa-sign-out-alt"></i> Logout / Clear Profile
+            </button>
+        </div>
+    </section>
+
+    <!-- ============================================
+    CATEGORY DASHBOARD
+    ============================================ -->
+    <section id="category-screen" class="hidden" role="main" aria-label="Category Dashboard">
+        <div class="container">
+            <div class="category-header">
+                <div class="greeting">👋 Hello, <span id="catGreetingName">Player</span></div>
+                <div class="user-badge">
+                    <div class="avatar" id="catAvatar">🧑‍🎓</div>
+                    <span id="catBadgeName">Player</span>
+                    <button class="btn btn-sm btn-secondary" id="catLogoutBtn">
+                        <i class="fas fa-sign-out-alt"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="category-grid" id="categoryGrid"></div>
+        </div>
+    </section>
+
+    <!-- ============================================
+    QUIZ SCREEN
+    ============================================ -->
+    <section id="quiz-screen" class="hidden" role="main" aria-label="Quiz">
+        <div class="container">
+            <div class="quiz-header">
+                <div class="user-info">
+                    <div class="avatar-sm" id="quizAvatar">🧑‍🎓</div>
+                    <span id="quizUserName">Player</span>
+                </div>
+                <div class="quiz-meta">
+                    <span class="meta-item"><i class="fas fa-tag"></i> <span id="quizCategory">Category</span></span>
+                    <span class="meta-item"><i class="fas fa-signal"></i> <span id="quizDifficulty">Medium</span></span>
+                    <span class="meta-item"><i class="fas fa-hashtag"></i> <span id="quizCurrentQ">1</span>/<span id="quizTotalQ">10</span></span>
+                    <span class="meta-item"><i class="fas fa-star"></i> Score: <span id="quizScore">0</span></span>
+                    <span class="meta-item"><i class="fas fa-clock"></i> <span id="quizTimerDisplay">20s</span></span>
+                </div>
+            </div>
+
+            <div class="quiz-main">
+                <div class="question-area">
+                    <div class="q-header">
+                        <span class="q-number" id="qNumberDisplay">Question 1 of 10</span>
+                        <div class="q-tags">
+                            <span class="badge badge-medium" id="qDifficultyBadge">Medium</span>
+                            <span style="font-size:0.65rem;padding:2px 12px;border-radius:60px;font-weight:600;background:var(--bg-glass);color:var(--text-muted);" id="qCategoryBadge">Science</span>
+                        </div>
+                    </div>
+                    <div class="question-text" id="questionText">Loading question...</div>
+
+                    <div class="options-grid" id="optionsGrid"></div>
+
+                    <div class="explanation-panel" id="explanationPanel">
+                        <div class="exp-title"><i class="fas fa-lightbulb"></i> Explanation</div>
+                        <div class="exp-text" id="explanationText">Explanation here.</div>
+                        <div class="exp-fact" id="explanationFact"></div>
+                    </div>
+
+                    <div class="quiz-nav">
+                        <button class="btn btn-secondary btn-sm" id="prevBtn"><i class="fas fa-chevron-left"></i> Prev</button>
+                        <button class="btn btn-secondary btn-sm" id="nextBtn">Next <i class="fas fa-chevron-right"></i></button>
+                        <button class="btn btn-warning btn-sm" id="skipBtn"><i class="fas fa-forward"></i> Skip</button>
+                        <button class="btn btn-outline btn-sm" id="bookmarkBtn"><i class="fas fa-bookmark"></i> Bookmark</button>
+                        <span class="spacer"></span>
+                        <button class="btn btn-danger btn-sm" id="submitQuizBtn">
+                            <i class="fas fa-check-circle"></i> Submit
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Sidebar -->
+                <div class="quiz-sidebar">
+                    <div class="timer-card">
+                        <div class="timer-ring">
+                            <svg viewBox="0 0 100 100">
+                                <circle class="bg-circle" cx="50" cy="50" r="42" />
+                                <circle class="progress-circle" id="timerCircle" cx="50" cy="50" r="42"
+                                stroke-dasharray="263.89" stroke-dashoffset="0" />
+                            </svg>
+                            <div class="timer-text" id="timerText">20</div>
+                        </div>
+                        <div class="timer-label">seconds remaining</div>
+                    </div>
+
+                    <div class="progress-card">
+                        <div class="progress-stats">
+                            <span>Progress</span>
+                            <span id="progressPercent">0%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="fill" id="progressFill" style="width:0%;"></div>
+                        </div>
+                        <div class="progress-detail">
+                            <span>✅ <span id="progressCorrect">0</span></span>
+                            <span>❌ <span id="progressIncorrect">0</span></span>
+                            <span>⏭️ <span id="progressSkipped">0</span></span>
+                            <span>📌 <span id="progressBookmarked">0</span></span>
+                        </div>
+                    </div>
+
+                    <div class="bookmark-list" id="bookmarkList">
+                        <h4>📌 Bookmarked</h4>
+                        <div id="bookmarkItems"><span style="color:var(--text-muted);font-size:0.8rem;">No bookmarks</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+    RESULTS SCREEN
+    ============================================ -->
+    <section id="results-screen" class="hidden" role="main" aria-label="Results">
+        <div class="container">
+            <h2 style="font-size:2rem;font-weight:800;margin-bottom:4px;text-align:center;">🎉 Quiz Complete!</h2>
+            <p style="text-align:center;color:var(--text-muted);margin-bottom:20px;" id="resultsSubtext">Here's how you performed.</p>
+            <div class="results-grid" id="resultsGrid"></div>
+
+            <!-- Category Selector -->
+            <div class="category-selector">
+                <label style="font-weight:600;color:var(--text-secondary);">New Quiz:</label>
+                <select id="resultsCategorySelect"></select>
+                <select id="resultsDifficultySelect">
+                    <option value="Easy">🟢 Easy</option>
+                    <option value="Medium" selected>🟡 Medium</option>
+                    <option value="Hard">🔴 Hard</option>
+                </select>
+                <button class="btn btn-primary btn-sm" id="resultsStartQuizBtn">
+                    <i class="fas fa-play"></i> Start
+                </button>
+            </div>
+
+            <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:20px;">
+                <button class="btn btn-primary" id="reviewBtn"><i class="fas fa-list"></i> Review</button>
+                <button class="btn btn-secondary" id="leaderboardBtn"><i class="fas fa-ranking-star"></i> Leaderboard</button>
+                <button class="btn btn-secondary" id="retryBtn"><i class="fas fa-rotate-right"></i> Retry</button>
+                <button class="btn btn-secondary" id="homeBtn"><i class="fas fa-home"></i> Home</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+    REVIEW SCREEN
+    ============================================ -->
+    <section id="review-screen" class="hidden" role="main" aria-label="Review Answers">
+        <div class="container">
+            <div class="flex-between" style="flex-wrap:wrap;gap:10px;margin-bottom:14px;">
+                <h2 style="font-size:1.6rem;font-weight:700;">📋 Review Answers</h2>
+                <button class="btn btn-secondary btn-sm" id="reviewBackBtn"><i class="fas fa-arrow-left"></i> Back</button>
+            </div>
+            <div class="review-filters" id="reviewFilters">
+                <button class="filter-btn active" data-filter="all">All</button>
+                <button class="filter-btn" data-filter="correct">✅ Correct</button>
+                <button class="filter-btn" data-filter="incorrect">❌ Incorrect</button>
+                <button class="filter-btn" data-filter="skipped">⏭️ Skipped</button>
+            </div>
+            <div id="reviewList"></div>
+        </div>
+    </section>
+
+    <!-- ============================================
+    LEADERBOARD SCREEN
+    ============================================ -->
+    <section id="leaderboard-screen" class="hidden" role="main" aria-label="Leaderboard">
+        <div class="container">
+            <div class="flex-between" style="flex-wrap:wrap;gap:10px;margin-bottom:14px;">
+                <h2 style="font-size:1.6rem;font-weight:700;">🏆 Leaderboard</h2>
+                <button class="btn btn-secondary btn-sm" id="leaderboardBackBtn"><i class="fas fa-arrow-left"></i> Back</button>
+            </div>
+            <div class="leaderboard-actions">
+                <button class="btn btn-danger btn-sm" id="clearLeaderboardBtn"><i class="fas fa-trash"></i> Clear All</button>
+            </div>
+            <div id="leaderboardContent">
+                <table class="leaderboard-table">
+                    <thead><tr><th>#</th><th>Player</th><th>Score</th><th>Category</th><th>Accuracy</th><th>Date</th><th></th></tr></thead>
+                    <tbody id="leaderboardBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <script src="script.js"></script>
+</body>
+</html>
